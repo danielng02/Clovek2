@@ -17,30 +17,43 @@ namespace Clovek
     class Clovek
     {
 
-        private string jmeno;
-        private string prijmeni;
-
-        public string Jmeno { get { return jmeno; } set { jmeno = value;} }
-        public string Prijmeni { get { return prijmeni; } set { prijmeni = value; } }
+        public string Jmeno { get; set; }
+        public string Prijmeni { get; set; }
 
 
         public Clovek()
         {
             Jmeno = "Neznama";
-            Prijmeni= "Neznama";
+            Prijmeni = "Neznama";
         }
         public Clovek(string j, string p)
         {
             Jmeno = j;
             Prijmeni = p;
         }
+
     }
 
     class Obcan : Clovek
     {
         private string rodneCislo;
+        Regex rx = new Regex(@"\d{6}\/\d{4}");
 
-        public string RodneCislo { get { return rodneCislo; } set { rodneCislo = value; } }
+        public string RodneCislo
+        {
+            get { return rodneCislo; }
+            set
+            {
+                if (rx.IsMatch(value))
+                {
+                    rodneCislo = value;
+                }
+                else
+                {
+                    throw new FormatException();
+                }
+            }
+        }
 
         public Obcan() : base()
         {
@@ -48,13 +61,11 @@ namespace Clovek
         }
         public Obcan(Clovek c, string r) : base(c.Jmeno, c.Prijmeni)
         {
-
-            Regex rx = new Regex(@"[0 - 9]{ 2,6}\/[0 - 9]{ 4}");
-            if (rx.IsMatch(r))
-            {
-                RodneCislo = r;
-            }
-            else { throw new FormatException(); }
+            RodneCislo = r;
+        }
+        public override string ToString()
+        {
+            return "Obcan: " + Jmeno + " " + Prijmeni + "" + RodneCislo;
         }
     }
 }
